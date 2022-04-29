@@ -1,0 +1,1 @@
+   要求学生熟练掌握和使用T－SQL﹑SQL Server企业管理器（或SQL server Management Studio）创建数据库﹑基本表﹑视图﹑索引和修改表结构，及向数据库输入数据的操作；学会创建和使用表的主码、外码和约束。

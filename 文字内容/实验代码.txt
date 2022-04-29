@@ -1,0 +1,82 @@
+-- 1.建表
+
+drop table if exists LBS;
+drop table if exists L;
+drop table if exists B;
+drop table if exists S;
+
+
+-- 图书馆 L表
+create table L (
+	LNO char(10) primary key,
+	LNAME varchar(20) not null,
+	CITY varchar(10) not null,
+	TEL varchar(20) not null unique,
+	constraint LNAME__CITY_UNI unique(LNAME, CITY),
+);
+
+insert into L (LNO, LNAME, CITY, TEL) values ('L1', '上海图书馆', '上海', '205800');
+insert into L (LNO, LNAME, CITY, TEL) values ('L2', '上海外文书店', '上海', '310310');
+insert into L (LNO, LNAME, CITY, TEL) values ('L3', '北京图书馆', '北京', '282471');
+insert into L (LNO, LNAME, CITY, TEL) values ('L4', '武汉图书馆', '武汉', '812712');
+insert into L (LNO, LNAME, CITY, TEL) values ('L5', '南京图书馆', '南京', '328173');
+
+
+-- 图书 B表
+create table B (
+	BNO char(10) primary key,
+	BNAME varchar(20) not null,
+	PRICE decimal(10, 2),
+);
+
+insert into B (BNO, BNAME, PRICE) values ('B1', '数据库原理', 9.80);
+insert into B (BNO, BNAME, PRICE) values ('B2', '系统分析与设计', 8.50);
+insert into B (BNO, BNAME, PRICE) values ('B3', '数据库设计', 7.10);
+insert into B (BNO, BNAME, PRICE) values ('B4', '计算机设计', 9.60);
+insert into B (BNO, BNAME, PRICE) values ('B5', '操作系统', 11.20);
+
+
+-- 书店 S表
+create table S (
+	SNO char(10) primary key,
+	SNAME varchar(20) not null,
+	[ADDRESS] varchar(10) not null,
+);
+
+insert into S (SNO, SNAME, [ADDRESS]) values ('S1', '北京新华书店', '北京');
+insert into S (SNO, SNAME, [ADDRESS]) values ('S2', '上海新华书店', '上海');
+insert into S (SNO, SNAME, [ADDRESS]) values ('S3', '上海外文书店', '上海');
+insert into S (SNO, SNAME, [ADDRESS]) values ('S4', '湖北新华书店', '武汉');
+insert into S (SNO, SNAME, [ADDRESS]) values ('S5', '江苏新华书店', '南京');
+
+-- 图书发行 LBS表
+create table LBS (
+	LNO char(10) not null,
+	BNO char(10) not null,
+	SNO char(10) not null,
+	QTY int not null,
+	constraint L_FORE foreign key(LNO) references L(LNO),
+	constraint B_FORE foreign key(BNO) references B(BNO),
+	constraint S_FORE foreign key(SNO) references S(SNO),
+);
+
+insert into LBS (LNO, BNO, SNO, QTY) values ('L1', 'B1', 'S2', 10);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L1', 'B2', 'S1', 5);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L1', 'B3', 'S3', 5);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L1', 'B4', 'S5', 20);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L2', 'B1', 'S3', 10);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L2', 'B4', 'S5', 20);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L2', 'B5', 'S4', 15);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L4', 'B4', 'S4', 20);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L4', 'B5', 'S4', 30);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L5', 'B1', 'S2', 10);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L5', 'B2', 'S5', 20);
+insert into LBS (LNO, BNO, SNO, QTY) values ('L5', 'B4', 'S5', 30);
+
+-- 2.为主键建立索引
+create unique index L_IDX on L(LNO);
+create unique index B_IDX on B(BNO);
+create unique index S_IDX on S(SNO);
+
+-- 3.创建视图
+create view L_VIEW as (select * from L);
